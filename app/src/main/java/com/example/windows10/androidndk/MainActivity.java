@@ -6,11 +6,18 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity {
 
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
+        if(OpenCVLoader.initDebug()){
+            Log.i("OCV","ok");
+        }else{
+            Log.i("OCV","bad");
+        }
     }
 
     @Override
@@ -32,6 +39,4 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     private native int[][] sumaMatrices(int[][] A, int[][]B);
-
-
 }
