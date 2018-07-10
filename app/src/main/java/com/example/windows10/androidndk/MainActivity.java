@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         double[] a={1,5};
         double[] b;
         b=complejoFromJNI(a);
-        int l = b.length;
+        int l = 2;
 
     }
     /**
