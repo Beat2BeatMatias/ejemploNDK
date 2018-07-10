@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 #include <iomanip>
+#include "Complejo.h"
 
 using namespace std;
 
