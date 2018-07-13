@@ -66,15 +66,25 @@ public class MainActivity extends AppCompatActivity {
         float[] audioI=new float[planes.get(0).cols()*planes.get(0).rows()];
         planes.get(1).get(0,0,audioI);
         // planes.get(0) = magnitude
-        Core.magnitude(planes.get(0), planes.get(1), planes.get(0));
-        Mat magI = planes.get(0);
-        //        audiof.get(0,0,af);
-//        tv.setText(""+af[0]+", "+ af[1] +", "+ af[2] +", "+ af[3]);
-//        Toast.makeText(this, ""+af[0] + af[1] + af[2] + af[3], Toast.LENGTH_LONG).show();
-        double[] a={1,5};
-        double[] b;
-        b=complejoFromJNI(a);
-        int l = 2;
+
+        Core.idft(complexI,complexI,Core.DFT_SCALE,0);
+        Core.split(complexI, planes);
+
+        float[] audioRi=new float[planes.get(0).cols()*planes.get(0).rows()];
+        planes.get(0).get(0,0,audioRi);
+        // planes.get(1) = Im(DFT(I))
+        float[] audioIi=new float[planes.get(0).cols()*planes.get(0).rows()];
+        planes.get(1).get(0,0,audioIi);
+        // planes.get(0) = magnitude
+//        Core.magnitude(planes.get(0), planes.get(1), planes.get(0));
+//        Mat magI = planes.get(0);
+//        //        audiof.get(0,0,af);
+////        tv.setText(""+af[0]+", "+ af[1] +", "+ af[2] +", "+ af[3]);
+////        Toast.makeText(this, ""+af[0] + af[1] + af[2] + af[3], Toast.LENGTH_LONG).show();
+//        double[] a={1,5};
+//        double[] b;
+//        b=complejoFromJNI(a);
+//        int l = 2;
 
     }
     /**
