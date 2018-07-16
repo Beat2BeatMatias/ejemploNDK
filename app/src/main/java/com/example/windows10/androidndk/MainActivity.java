@@ -1,21 +1,19 @@
 package com.example.windows10.androidndk;
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 //        int[][] M2 = {{4, 3}, {0, 2}, {1, 5}};
 //        int[][] M3 = sumaMatrices(M1, M2);
         float[] audio = {1, 2, 3, 4, 5, 6};
+
 
         Mat audioMat = new Mat(1, audio.length, CvType.CV_32F);
 
