@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("native-lib");
         System.loadLibrary("aplicarComplejo");
         System.loadLibrary("Complejo");
+        System.loadLibrary("multComplexI");
+        System.loadLibrary("multComplexR");
         if(OpenCVLoader.initDebug()){
             Log.i("OCV","ok");
         }else{
@@ -38,33 +40,27 @@ public class MainActivity extends AppCompatActivity {
 //        int[][] M1 = {{2, 3}, {4, 6}, {2, 4}};
 //        int[][] M2 = {{4, 3}, {0, 2}, {1, 5}};
 //        int[][] M3 = sumaMatrices(M1, M2);
-        float[] audio = {1, 2, 3, 4, 5, 6};
+        double[] audio = {0,1, 2, 3, 4, 5, 6};
 
-
-        Mat audioMat = new Mat(1, audio.length, CvType.CV_32F);
-
-        Mat padded= new Mat();
+        Mat audioMat = new Mat(1, audio.length, CvType.CV_64F);
         audioMat.put(0, 0, audio);
-
-        int r=Core.getOptimalDFTSize(audioMat.rows());
-        int c=Core.getOptimalDFTSize(audioMat.cols());
-
-        Core.copyMakeBorder(audioMat, padded, 0, r - audioMat.rows(), 0, c - audioMat.cols(), Core.BORDER_CONSTANT, Scalar.all(0));
         List<Mat> planes = new ArrayList<Mat>();
-        padded.convertTo(padded, CvType.CV_32F);
-        planes.add(padded);
-        planes.add(Mat.zeros(padded.size(), CvType.CV_32F));
+        planes.add(audioMat);
+        planes.add(Mat.zeros(audioMat.size(), CvType.CV_64F));
         Mat complexI = new Mat();
         Core.merge(planes, complexI);
         Core.dft(complexI,complexI);
         Core.split(complexI, planes);
         // planes.get(0) = Re(DFT(I)
-        float[] audioR=new float[planes.get(0).cols()*planes.get(0).rows()];
+        double[] audioR=new double[planes.get(0).cols()*planes.get(0).rows()];
         planes.get(0).get(0,0,audioR);
         // planes.get(1) = Im(DFT(I))
-        float[] audioI=new float[planes.get(0).cols()*planes.get(0).rows()];
+        double[] audioI=new double[planes.get(0).cols()*planes.get(0).rows()];
         planes.get(1).get(0,0,audioI);
         // planes.get(0) = magnitude
+
+        double[] sRealM=multComplexRealFromJNI(audioR,audioI);
+        double[] sImgM=multComplexImaginarioFromJNI(audioR,audioI);
 
         Core.idft(complexI,complexI,Core.DFT_SCALE,0);
         Core.split(complexI, planes);
@@ -92,4 +88,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private native int[][] sumaMatrices(int[][] A, int[][]B);
     private native double[] complejoFromJNI(double[] A);
+    public native double[] multComplexRealFromJNI(double[] sR,double[] sI);
+    public native double[] multComplexImaginarioFromJNI(double[] sR,double[] sI);
 }

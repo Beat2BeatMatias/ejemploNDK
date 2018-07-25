@@ -3,6 +3,7 @@
 //
 
 #include <jni.h>
+#include <cmath>
 #include "Complejo.h"
 
 Complejo::Complejo(jdouble real, jdouble img) {
@@ -28,4 +29,30 @@ Complejo Complejo::suma(Complejo a, Complejo b) {
     c.setReal(cr);
     c.setImg(ci);
     return c;
+
 }
+Complejo Complejo::resta(Complejo a, Complejo b) {
+    Complejo c;
+    jdouble cr = a.getReal() - b.getReal();
+    jdouble ci = a.getImg() - b.getImg();
+    c.setReal(cr);
+    c.setImg(ci);
+    return c;
+}
+Complejo Complejo::multiplicacion(Complejo a, Complejo b) {
+    Complejo c;
+    jdouble cr=a.getReal()*b.getReal() - a.getImg()*b.getImg();
+    jdouble ci=a.getReal()*b.getImg() + a.getImg()*b.getReal();
+    c.setReal(cr);
+    c.setImg(ci);
+    return c;
+}
+Complejo Complejo::division(Complejo a, Complejo b) {
+    Complejo c;
+    jdouble cr=(a.getReal()*b.getReal()+a.getImg()*b.getImg())/(pow(b.getReal(),2.0) + pow(b.getImg(),2.0));
+    jdouble ci=(a.getImg()*b.getReal()-a.getReal()*b.getImg())/(pow(b.getReal(),2.0) + pow(b.getImg(),2.0));
+    c.setReal(cr);
+    c.setImg(ci);
+    return c;
+}
+

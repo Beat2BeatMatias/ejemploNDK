@@ -13,9 +13,9 @@ private:
 public:
     Complejo(jdouble = 0 , jdouble = 0);
     Complejo suma(Complejo, Complejo);
-//    Complejo resta(Complejo, Complejo);
-//    Complejo multiplicacion(Complejo, Complejo);
-//    Complejo division(Complejo, Complejo);
+    Complejo resta(Complejo, Complejo);
+    Complejo multiplicacion(Complejo, Complejo);
+    Complejo division(Complejo, Complejo);
 //    Complejo modulo(Complejo);
     jdouble getReal();
     jdouble getImg();
