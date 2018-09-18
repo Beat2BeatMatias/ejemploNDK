@@ -1,4 +1,5 @@
 package com.example.windows10.androidndk;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
-//        int[][] M1 = {{2, 3}, {4, 6}, {2, 4}};
-//        int[][] M2 = {{4, 3}, {0, 2}, {1, 5}};
-//        int[][] M3 = sumaMatrices(M1, M2);
-        double[] audio = {0,1, 2, 3, 4, 5, 6};
+        int[][] M1 = {{2, 3}, {4, 6}, {2, 4}};
+        int[][] M2 = {{4, 3}, {0, 2}, {1, 5}};
+        int[][] M3 = sumaMatrices(M1, M2);
+        double[] audio = {0 ,1 , 1, 2, 3, 4,4,4,3,2,1,1,0};
 
         Mat audioMat = new Mat(1, audio.length, CvType.CV_64F);
         audioMat.put(0, 0, audio);
+
         List<Mat> planes = new ArrayList<Mat>();
         planes.add(audioMat);
         planes.add(Mat.zeros(audioMat.size(), CvType.CV_64F));
@@ -64,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         Core.idft(complexI,complexI,Core.DFT_SCALE,0);
         Core.split(complexI, planes);
-
         float[] audioRi=new float[planes.get(0).cols()*planes.get(0).rows()];
         planes.get(0).get(0,0,audioRi);
         // planes.get(1) = Im(DFT(I))
