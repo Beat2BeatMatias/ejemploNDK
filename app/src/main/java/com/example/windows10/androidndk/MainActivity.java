@@ -14,6 +14,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -44,34 +45,34 @@ public class MainActivity extends AppCompatActivity {
         int[][] M3 = sumaMatrices(M1, M2);
         double[] audio = {0 ,1 , 1, 2, 3, 4,4,4,3,2,1,1,0};
 
-        Mat audioMat = new Mat(1, audio.length, CvType.CV_64F);
-        audioMat.put(0, 0, audio);
-
-        List<Mat> planes = new ArrayList<Mat>();
-        planes.add(audioMat);
-        planes.add(Mat.zeros(audioMat.size(), CvType.CV_64F));
-        Mat complexI = new Mat();
-        Core.merge(planes, complexI);
-        Core.dft(complexI,complexI);
-        Core.split(complexI, planes);
-        // planes.get(0) = Re(DFT(I)
-        double[] audioR=new double[planes.get(0).cols()*planes.get(0).rows()];
-        planes.get(0).get(0,0,audioR);
-        // planes.get(1) = Im(DFT(I))
-        double[] audioI=new double[planes.get(0).cols()*planes.get(0).rows()];
-        planes.get(1).get(0,0,audioI);
-        // planes.get(0) = magnitude
-
-        double[] sRealM=multComplexRealFromJNI(audioR,audioI);
-        double[] sImgM=multComplexImaginarioFromJNI(audioR,audioI);
-
-        Core.idft(complexI,complexI,Core.DFT_SCALE,0);
-        Core.split(complexI, planes);
-        float[] audioRi=new float[planes.get(0).cols()*planes.get(0).rows()];
-        planes.get(0).get(0,0,audioRi);
-        // planes.get(1) = Im(DFT(I))
-        float[] audioIi=new float[planes.get(0).cols()*planes.get(0).rows()];
-        planes.get(1).get(0,0,audioIi);
+//        Mat audioMat = new Mat(1, audio.length, CvType.CV_64F);
+//        audioMat.put(0, 0, audio);
+//
+//        List<Mat> planes = new ArrayList<Mat>();
+//        planes.add(audioMat);
+//        planes.add(Mat.zeros(audioMat.size(), CvType.CV_64F));
+//        Mat complexI = new Mat();
+//        Core.merge(planes, complexI);
+//        Core.dft(complexI,complexI);
+//        Core.split(complexI, planes);
+//        // planes.get(0) = Re(DFT(I)
+//        double[] audioR=new double[planes.get(0).cols()*planes.get(0).rows()];
+//        planes.get(0).get(0,0,audioR);
+//        // planes.get(1) = Im(DFT(I))
+//        double[] audioI=new double[planes.get(0).cols()*planes.get(0).rows()];
+//        planes.get(1).get(0,0,audioI);
+//        // planes.get(0) = magnitude
+//
+//        double[] sRealM=multComplexRealFromJNI(audioR,audioI);
+//        double[] sImgM=multComplexImaginarioFromJNI(audioR,audioI);
+//
+//        Core.idft(complexI,complexI,Core.DFT_SCALE,0);
+//        Core.split(complexI, planes);
+//        float[] audioRi=new float[planes.get(0).cols()*planes.get(0).rows()];
+//        planes.get(0).get(0,0,audioRi);
+//        // planes.get(1) = Im(DFT(I))
+//        float[] audioIi=new float[planes.get(0).cols()*planes.get(0).rows()];
+//        planes.get(1).get(0,0,audioIi);
         // planes.get(0) = magnitude
 //        Core.magnitude(planes.get(0), planes.get(1), planes.get(0));
 //        Mat magI = planes.get(0);
@@ -82,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
 //        double[] b;
 //        b=complejoFromJNI(a);
 //        int l = 2;
+        int[] matriz={1,2,3,4};
+        int[] matriz2=new int[4];
+        Mat mat=new Mat(2,2,CvType.CV_32S);
+        mat.put(0,0,matriz);
+        mat.get(0,0,matriz2);
+
+
+        Log.i("mat",""+mat.get(1,0)[0]);
 
     }
     /**
