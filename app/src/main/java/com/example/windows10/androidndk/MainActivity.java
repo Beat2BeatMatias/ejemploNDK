@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 //        double[] b;
 //        b=complejoFromJNI(a);
 //        int l = 2;
+
         int[] matriz={1,2,3,4};
         int[] matriz2=new int[4];
         Mat mat=new Mat(2,2,CvType.CV_32S);
