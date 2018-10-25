@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("Complejo");
         System.loadLibrary("multComplexI");
         System.loadLibrary("multComplexR");
+        System.loadLibrary("filter");
         if(OpenCVLoader.initDebug()){
             Log.i("OCV","ok");
         }else{
@@ -90,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
         mat.put(0,0,matriz);
         mat.get(0,0,matriz2);
 
+        double src[]={0.1,-0.1,0.5,-0.5};
+        double h[]={0.1,0.5,0.7,0.1};
+        double[] senialE={1.3,1.5,-0.65,0.23};
+        double b=1;
+        double[] a={1.5,-0.5};
+        double g=5;
+
+        double[] ejemploFiltrado=filterFromJNI(b,a,g,h,src);
 
         Log.i("mat",""+mat.get(1,0)[0]);
 
@@ -102,4 +111,5 @@ public class MainActivity extends AppCompatActivity {
     private native double[] complejoFromJNI(double[] A);
     public native double[] multComplexRealFromJNI(double[] sR,double[] sI);
     public native double[] multComplexImaginarioFromJNI(double[] sR,double[] sI);
+    public native double[] filterFromJNI(double b,double[] a,double g,double[] h,double[] src);
 }

@@ -42,8 +42,10 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_windows10_androidndk_MainActivit
                 env->GetIntArrayElements(vectorB,NULL);
         bufferC =
                 env->GetIntArrayElements(vectorC,NULL);
+
         for (j=0;j<longitud_vector;j++)
             bufferC[j] = bufferA[j] + bufferB[j];
+
         env->ReleaseIntArrayElements(vectorA,bufferA,JNI_ABORT);
         env->ReleaseIntArrayElements(vectorB,bufferB,JNI_ABORT);
         env->ReleaseIntArrayElements(vectorC,bufferC,0);
@@ -52,5 +54,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_windows10_androidndk_MainActivit
         env->DeleteLocalRef(vectorB);
         env->DeleteLocalRef(vectorC);
     }
+
     return arrayC;
+
 }
