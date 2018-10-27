@@ -10,6 +10,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfDouble;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("multComplexI");
         System.loadLibrary("multComplexR");
         System.loadLibrary("filter");
+        System.loadLibrary("metodoLPC");
+        System.loadLibrary("matrizOLA");
         if(OpenCVLoader.initDebug()){
             Log.i("OCV","ok");
         }else{
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         int[][] M1 = {{2, 3}, {4, 6}, {2, 4}};
         int[][] M2 = {{4, 3}, {0, 2}, {1, 5}};
         int[][] M3 = sumaMatrices(M1, M2);
-        double[] audio = {0 ,1 , 1, 2, 3, 4,4,4,3,2,1,1,0};
+        double[] audio = {0, 1, 1, 2, 3, 4, 4, 4, 3, 2, 1, 1, 0};
 
 //        Mat audioMat = new Mat(1, audio.length, CvType.CV_64F);
 //        audioMat.put(0, 0, audio);
@@ -84,24 +87,104 @@ public class MainActivity extends AppCompatActivity {
 //        double[] b;
 //        b=complejoFromJNI(a);
 //        int l = 2;
-
-        int[] matriz={1,2,3,4};
-        int[] matriz2=new int[4];
-        Mat mat=new Mat(2,2,CvType.CV_32S);
-        mat.put(0,0,matriz);
-        mat.get(0,0,matriz2);
-
-        double src[]={0.1,-0.1,0.5,-0.5};
-        double h[]={0.1,0.5,0.7,0.1};
-        double[] senialE={1.3,1.5,-0.65,0.23};
-        double b=1;
-        double[] a={1.5,-0.5};
-        double g=5;
-
-        double[] ejemploFiltrado=filterFromJNI(b,a,g,h,src);
-
-        Log.i("mat",""+mat.get(1,0)[0]);
-
+///////////////////////////////////////////////////////////////////////////////////
+//        int[] matriz={1,2,3,4};
+//        int[] matriz2=new int[4];
+//        Mat mat=new Mat(2,2,CvType.CV_32S);
+//        mat.put(0,0,matriz);
+//        mat.get(0,0,matriz2);
+//
+//        double src[]={0.1,-0.1,0.5,-0.5};
+//        double h[]={0.1,0.5,0.7,0.1};
+//        double[] senialE={1.3,1.5,-0.65,0.23};
+//        double b=1;
+//        double[] a={1.5,-0.5};
+//        double g=5;
+//
+//        double[] ejemploFiltrado=filterFromJNI(b,a,g,h,src);
+//
+//        Log.i("mat",""+mat.get(1,0)[0]);
+///////////////////////////////////////////////////////////////////////////////////
+//        double[] prueba = {1, 2, 3, 4, 5, 6};
+//
+//        Mat tempM = new Mat(1, prueba.length, CvType.CV_64F);
+//        tempM.put(0, 0, prueba);
+//
+//        int p = 2;
+//
+//        double[] A = metodoLPCFromJNI(prueba, p);
+//
+//        String resultadoS = "";
+//
+//        for (int i = 0; i < A.length; i++)
+//            resultadoS += A[i] + " ";
+//
+//        Log.i("resultado", "" + resultadoS);
+//
+//        //Calculo de a=pinv(A)*b
+//        Mat Amat = new Mat(p, prueba.length - 1, CvType.CV_64F);
+//        Amat.put(0, 0, A);
+//
+//        Mat AmatPI = Mat.zeros(prueba.length - 1, p, CvType.CV_64F);
+//
+//        //Calcula la inversa o pseudoinversa de la matriz
+//        Core.invert(Amat, AmatPI, Core.DECOMP_SVD);
+//
+//        //AIT=A'
+//        Mat AmatPIT = new Mat(AmatPI.cols(), AmatPI.rows(), CvType.CV_64F);
+//        Core.transpose(AmatPI, AmatPIT);
+//
+//        Mat b;
+//        b = tempM.submat(0, 1, 1, tempM.cols());
+//        //bT=b'
+//        Mat bT = new Mat();
+//        Core.transpose(b, bT);
+//
+//        //Multiplicacion matricial
+//        Mat a = Mat.zeros(AmatPIT.rows(), b.cols(), CvType.CV_64F);
+//        Core.gemm(AmatPIT, bT, 1, a, 0, a);
+//
+//        double[] dA = new double[a.rows() * a.cols()];
+//        a.get(0, 0, dA);
+//
+//        resultadoS="";
+//        for(int i=0;i<dA.length;i++)
+//            resultadoS+=dA[i]+" ";
+//
+//        Log.i("resultado",""+resultadoS);
+//
+//        //Calculo de e=b-A*a
+//        Mat AmatI=new Mat();
+//        Core.transpose(Amat,AmatI);
+//        Mat c= Mat.zeros(AmatI.rows(), a.cols(),CvType.CV_64F);
+//        Core.gemm(AmatI,a,1,c,0,c);
+//        Mat e=new Mat();
+//        Core.subtract(bT,c,e);
+//
+//        //Calculo de g=sqrt(var(e))
+//        MatOfDouble gStd=new MatOfDouble();
+//        MatOfDouble gMean=new MatOfDouble();
+//        Core.meanStdDev(e,gMean,gStd);
+//
+//        double[] dG = new double[gStd.rows() * gStd.cols()];
+//        gStd.get(0, 0, dG);
+//
+//        double[] dE = new double[e.rows() * e.cols()];
+//        e.get(0, 0, dE);
+//
+//        resultadoS="";
+//        for(int i=0;i<dE.length;i++)
+//            resultadoS+=dE[i]+" ";
+//
+//        Log.i("resultado",""+resultadoS + " " + dG[0]);
+////////////////////////////////////////////////////////////////////////////
+//        prueba=[1,2,3,4,5,6];
+//        w=[0.2,0.5,0.2];
+//        X=matrizOLA(prueba,w);
+        double prueba[]={1,2,3,4,5,6};
+        double w[]={0.2,0.5,0.2};
+        double X[]=matrizOLAFromJNI(w,prueba);
+////////////////////////////////////////////////////////////////////////////
     }
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -112,4 +195,6 @@ public class MainActivity extends AppCompatActivity {
     public native double[] multComplexRealFromJNI(double[] sR,double[] sI);
     public native double[] multComplexImaginarioFromJNI(double[] sR,double[] sI);
     public native double[] filterFromJNI(double b,double[] a,double g,double[] h,double[] src);
+    public native double[] metodoLPCFromJNI(double[] S,int p);
+    public native double[] matrizOLAFromJNI(double[] H,double[] S);
 }
