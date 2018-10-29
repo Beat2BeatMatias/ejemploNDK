@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("filter");
         System.loadLibrary("metodoLPC");
         System.loadLibrary("matrizOLA");
+        System.loadLibrary("pressStack");
         if(OpenCVLoader.initDebug()){
             Log.i("OCV","ok");
         }else{
@@ -178,13 +179,16 @@ public class MainActivity extends AppCompatActivity {
 //
 //        Log.i("resultado",""+resultadoS + " " + dG[0]);
 ////////////////////////////////////////////////////////////////////////////
-//        prueba=[1,2,3,4,5,6];
-//        w=[0.2,0.5,0.2];
-//        X=matrizOLA(prueba,w);
-        double prueba[]={1,2,3,4,5,6};
-        double w[]={0.2,0.5,0.2};
-        double X[]=matrizOLAFromJNI(w,prueba);
+////        prueba=[1,2,3,4,5,6];
+////        w=[0.2,0.5,0.2];
+////        X=matrizOLA(prueba,w);
+//        double prueba[]={1,2,3,4,5,6};
+//        double w[]={0.2,0.5,0.2};
+//        double X[]=matrizOLAFromJNI(w,prueba);
 ////////////////////////////////////////////////////////////////////////////
+        double[] preSenial={1,2,3,4,5,6,7,8};
+        int step=2;
+        double[] senialLPC = pressStackFromJNI(preSenial,step,4,2);
     }
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -197,4 +201,5 @@ public class MainActivity extends AppCompatActivity {
     public native double[] filterFromJNI(double b,double[] a,double g,double[] h,double[] src);
     public native double[] metodoLPCFromJNI(double[] S,int p);
     public native double[] matrizOLAFromJNI(double[] H,double[] S);
+    public native double[] pressStackFromJNI(double[] preSenial,int step,int hammingLength,int count);
 }
