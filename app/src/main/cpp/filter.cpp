@@ -11,8 +11,7 @@
 using namespace std;
 extern "C"
 
-JNIEXPORT jdoubleArray JNICALL Java_com_example_windows10_androidndk_MainActivity_filterFromJNI(JNIEnv *env,
-                                                                                                        jobject obj,jdouble b,jdoubleArray a, jdouble g,jdoubleArray h,jdoubleArray src) {
+JNIEXPORT jdoubleArray JNICALL Java_com_example_windows10_androidndk_MainActivity_filterFromJNI(JNIEnv *env, jobject obj,jdouble b,jdoubleArray a, jdouble g,jdoubleArray h,jdoubleArray src) {
     jsize N = env->GetArrayLength(src);
     jdouble *sSrc = env->GetDoubleArrayElements(src,0);
     jdouble *sH = env->GetDoubleArrayElements(h,0);
@@ -20,7 +19,7 @@ JNIEXPORT jdoubleArray JNICALL Java_com_example_windows10_androidndk_MainActivit
     jdouble *sA= env->GetDoubleArrayElements(a,0);
 
     jint lenA2=(lenA+1);
-    jdouble a2[3];
+    jdouble a2[lenA2];
 
     for (jint i=0;i<lenA2;i++){
         if (i==0)
@@ -62,4 +61,3 @@ JNIEXPORT jdoubleArray JNICALL Java_com_example_windows10_androidndk_MainActivit
 
     return salida;
 }
-

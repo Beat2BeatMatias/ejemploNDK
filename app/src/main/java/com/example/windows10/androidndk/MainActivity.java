@@ -106,78 +106,80 @@ public class MainActivity extends AppCompatActivity {
 //
 //        Log.i("mat",""+mat.get(1,0)[0]);
 ///////////////////////////////////////////////////////////////////////////////////
-//        double[] prueba = {1, 2, 3, 4, 5, 6};
-//
-//        Mat tempM = new Mat(1, prueba.length, CvType.CV_64F);
-//        tempM.put(0, 0, prueba);
-//
-//        int p = 2;
-//
-//        double[] A = metodoLPCFromJNI(prueba, p);
-//
-//        String resultadoS = "";
-//
-//        for (int i = 0; i < A.length; i++)
-//            resultadoS += A[i] + " ";
-//
-//        Log.i("resultado", "" + resultadoS);
-//
-//        //Calculo de a=pinv(A)*b
-//        Mat Amat = new Mat(p, prueba.length - 1, CvType.CV_64F);
-//        Amat.put(0, 0, A);
-//
-//        Mat AmatPI = Mat.zeros(prueba.length - 1, p, CvType.CV_64F);
-//
-//        //Calcula la inversa o pseudoinversa de la matriz
-//        Core.invert(Amat, AmatPI, Core.DECOMP_SVD);
-//
-//        //AIT=A'
-//        Mat AmatPIT = new Mat(AmatPI.cols(), AmatPI.rows(), CvType.CV_64F);
-//        Core.transpose(AmatPI, AmatPIT);
-//
-//        Mat b;
-//        b = tempM.submat(0, 1, 1, tempM.cols());
-//        //bT=b'
-//        Mat bT = new Mat();
-//        Core.transpose(b, bT);
-//
-//        //Multiplicacion matricial
-//        Mat a = Mat.zeros(AmatPIT.rows(), b.cols(), CvType.CV_64F);
-//        Core.gemm(AmatPIT, bT, 1, a, 0, a);
-//
-//        double[] dA = new double[a.rows() * a.cols()];
-//        a.get(0, 0, dA);
-//
-//        resultadoS="";
-//        for(int i=0;i<dA.length;i++)
-//            resultadoS+=dA[i]+" ";
-//
-//        Log.i("resultado",""+resultadoS);
-//
-//        //Calculo de e=b-A*a
-//        Mat AmatI=new Mat();
-//        Core.transpose(Amat,AmatI);
-//        Mat c= Mat.zeros(AmatI.rows(), a.cols(),CvType.CV_64F);
-//        Core.gemm(AmatI,a,1,c,0,c);
-//        Mat e=new Mat();
-//        Core.subtract(bT,c,e);
-//
-//        //Calculo de g=sqrt(var(e))
-//        MatOfDouble gStd=new MatOfDouble();
-//        MatOfDouble gMean=new MatOfDouble();
-//        Core.meanStdDev(e,gMean,gStd);
-//
-//        double[] dG = new double[gStd.rows() * gStd.cols()];
-//        gStd.get(0, 0, dG);
-//
-//        double[] dE = new double[e.rows() * e.cols()];
-//        e.get(0, 0, dE);
-//
-//        resultadoS="";
-//        for(int i=0;i<dE.length;i++)
-//            resultadoS+=dE[i]+" ";
-//
-//        Log.i("resultado",""+resultadoS + " " + dG[0]);
+
+        Mat preSenialMat=new Mat(1,6*2,CvType.CV_64F);
+        int iCol=0;
+        for(int i=0;i<2;i++) {
+
+            double[] prueba = {1, 2, 3, 4, 5, 6};
+
+            Mat tempM = new Mat(1, prueba.length, CvType.CV_64F);
+            tempM.put(0, 0, prueba);
+
+            int p = 2;
+
+            double[] A = metodoLPCFromJNI(prueba, p);
+
+            //Calculo de a=pinv(A)*b
+            Mat Amat = new Mat(p, prueba.length - 1, CvType.CV_64F);
+            Amat.put(0, 0, A);
+
+            Mat AmatPI = Mat.zeros(prueba.length - 1, p, CvType.CV_64F);
+
+            //Calcula la inversa o pseudoinversa de la matriz
+            Core.invert(Amat, AmatPI, Core.DECOMP_SVD);
+
+            //AIT=A'
+            Mat AmatPIT = new Mat(AmatPI.cols(), AmatPI.rows(), CvType.CV_64F);
+            Core.transpose(AmatPI, AmatPIT);
+
+            Mat b;
+            b = tempM.submat(0, 1, 1, tempM.cols());
+            //bT=b'
+            Mat bT = new Mat();
+            Core.transpose(b, bT);
+
+            //Multiplicacion matricial
+            Mat a = Mat.zeros(AmatPIT.rows(), b.cols(), CvType.CV_64F);
+            Core.gemm(AmatPIT, bT, 1, a, 0, a);
+
+            double[] dA = new double[a.rows() * a.cols()];
+            a.get(0, 0, dA);
+
+            //Calculo de e=b-A*a
+            Mat AmatI = new Mat();
+            Core.transpose(Amat, AmatI);
+            Mat c = Mat.zeros(AmatI.rows(), a.cols(), CvType.CV_64F);
+            Core.gemm(AmatI, a, 1, c, 0, c);
+            Mat e = new Mat();
+            Core.subtract(bT, c, e);
+
+            //Calculo de g=sqrt(var(e))
+            MatOfDouble gStd = new MatOfDouble();
+            MatOfDouble gMean = new MatOfDouble();
+            Core.meanStdDev(e, gMean, gStd);
+
+            double[] dGstd = new double[gStd.rows() * gStd.cols()];
+            gStd.get(0, 0, dGstd);
+
+
+            double[] dSrc = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6};
+            double[] hamming = {1, 1, 1, 1, 1, 1};
+
+            //DecodificadoLPC
+            double sFiltrada[] = filterFromJNI(1, dA, 2, hamming, dSrc);
+            Log.i("aplicarLPC", "" + sFiltrada.length);//Comprobado
+
+            preSenialMat.put(0,iCol,sFiltrada);
+
+            iCol+=6;
+        }
+        double preSenial[]=new double[preSenialMat.rows()*preSenialMat.cols()];
+        preSenialMat.get(0,0,preSenial);
+
+        double[] senialLPC = pressStackFromJNI(preSenial,3,6,2);
+        Mat senialLPCMAT=new Mat(1,senialLPC.length,CvType.CV_64F);
+        senialLPCMAT.put(0,0,senialLPC); //comprobado
 ////////////////////////////////////////////////////////////////////////////
 ////        prueba=[1,2,3,4,5,6];
 ////        w=[0.2,0.5,0.2];
@@ -185,10 +187,11 @@ public class MainActivity extends AppCompatActivity {
 //        double prueba[]={1,2,3,4,5,6};
 //        double w[]={0.2,0.5,0.2};
 //        double X[]=matrizOLAFromJNI(w,prueba);
-////////////////////////////////////////////////////////////////////////////
-        double[] preSenial={1,2,3,4,5,6,7,8};
-        int step=2;
-        double[] senialLPC = pressStackFromJNI(preSenial,step,4,2);
+//////////////////////////////////////////////////////////////////////////////////////////////
+//        double[] preSenial={1,2,3,4,5,6,7,8};
+//        int step=2;
+//        double[] senialLPC = pressStackFromJNI(preSenial,step,4,2);
+//////////////////////////////////////////////////////////////////////////////////////////////
     }
     /**
      * A native method that is implemented by the 'native-lib' native library,
